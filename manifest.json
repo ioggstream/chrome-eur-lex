@@ -1,0 +1,24 @@
+{
+   "background": {
+      "persistent": false,
+      "scripts": [ "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "icon_inactive.png",
+      "default_title": "Show fragment URL."
+   },
+   "omnibox": { "keyword" : "eurlex" },
+   "icons": {
+      "128": "icon128.png"
+   },
+   "manifest_version": 2,
+   "description": "Search in eur-lex and makes inner references clickable.",
+   "name": "eur-lex unofficial",
+   "permissions": [ 
+	"activeTab", 
+	"declarativeContent",
+	"clipboardWrite" 
+	],
+   "version": "0.1"
+}
+
