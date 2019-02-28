@@ -4,19 +4,19 @@
     var lastElement=null;
     var identifier;
 
-function empty(e) {
-  switch (e) {
-    case "":
-    case 0:
-    case "0":
-    case null:
-    case false:
-    case typeof this == "undefined":
-      return true;
-    default:
-      return false;
-  }
-}
+    function empty(e) {
+        switch (e) {
+            case "":
+            case 0:
+            case "0":
+            case null:
+            case false:
+            case typeof this == "undefined":
+            return true;
+            default:
+            return false;
+        }
+    }
     function addFragmentToCeLex(location, fragment){
         var urlParams = new URLSearchParams(location.search);
         
@@ -54,31 +54,36 @@ function empty(e) {
     function goToURL(e){
         console.log('srcElement: ', e);
         console.log('identifier:' + identifier);        
-        if (! empty(e.srcElement.id)){
-            url = addFragmentToCeLex(document.location, e.srcElement.id);
+        if (! empty(identifier)){
+            url = addFragmentToCeLex(document.location, identifier);
+            console.log("Referenced URL:" + url);
+            // Move to the new location
+            document.location.href = url;
         }
-	// Move to the new location
-        document.location.href = url;
     }
     function highlightElement(target){
         restoreLastElement();
         lastElement = target;
         originalStyle = { 
-		'borderColor':  target.style.borderColor,
-		'textDecoration': target.style.textDecoration,
-		'border': target.style.border
-	};
+            'borderColor':  target.style.borderColor,
+            'textDecoration': target.style.textDecoration,
+            'border': target.style.border
+        };
         
         // highlight element with ID.
         target.style.borderColor = "blue";
         target.style.border= "solid 1px";
         target.style.textDecoration = "underline";
+        
+        target.style.cursor = "pointer";
     }
     function findElementId(o){
-        if(o.id != "" && document.getElementById(o.id) == o) return o.id;
+        if(o.id != "" && document.getElementById(o.id) == o)
+            return o.id;
         if(o.tagName == "A" && o.name != "" && document.getElementById(o.name) == null){
             for(var i = 0; i < document.anchors.length; i++){
-                if(document.anchors[i].name == o.name) return o.name;
+                if(document.anchors[i].name == o.name)
+                    return o.name;
             }
         }
         return null;
@@ -86,14 +91,17 @@ function empty(e) {
     function handler(e){
         var o = e.target;
 
- 	// element didn't change.
+        // element didn't change.
         if(lastElement == o)
-		return; 
+            return; 
 
-	// element changed, find identifier.
+        // element changed, find identifier
+        // traversing thru parentElement.
         identifier = findElementId(o);
         while(identifier == null){
-            if(o == document.body || o.parentElement == document.body) return;
+            // stop when you find the body.
+            if(o == document.body || o.parentElement == document.body)
+                return;
             o = o.parentElement;
             identifier = findElementId(o);
         }
